@@ -8,12 +8,12 @@
 | 400-line budget risk | High |
 | Chained PRs recommended | Yes |
 | Suggested split | PR 1 (Foundation) → PR 2 (Core) → PR 3 (Tests) |
-| Delivery strategy | ask-on-risk |
-| Chain strategy | pending |
+| Delivery strategy | auto-chain (resolved) |
+| Chain strategy | stacked-to-main |
 
-Decision needed before apply: Yes
+Decision needed before apply: No (resolved by orchestrator/user)
 Chained PRs recommended: Yes
-Chain strategy: pending
+Chain strategy: stacked-to-main
 400-line budget risk: High
 
 ### Suggested Work Units
@@ -26,26 +26,26 @@ Chain strategy: pending
 
 ## Phase 1: Foundation / Build Setup
 
-- [ ] 1.1 Create `pom.xml` with Spring Boot 3.4.x parent, Java 21, SDN 7, Spring Security, Validation
-- [ ] 1.2 Add Neo4j driver and Testcontainers dependencies for integration tests
-- [ ] 1.3 Create base package structure: `com.adoptme.matchpet.{domain,application,infrastructure,web}`
+- [x] 1.1 Create `pom.xml` with Spring Boot 3.4.x parent, Java 21, SDN 7, Spring Security, Validation
+- [x] 1.2 Add Neo4j driver and Testcontainers dependencies for integration tests
+- [x] 1.3 Create base package structure: `com.adoptme.matchpet.{domain,application,infrastructure,web}`
 
 ## Phase 2: Domain Model (TDD Cycle)
 
-- [ ] 2.1 RED: Write test for `Trait` entity creation and equality
-- [ ] 2.2 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Trait.java` as `@Node` record with `@Id String id, String name`
-- [ ] 2.3 REFACTOR: Validate Trait immutability and null constraints
+- [x] 2.1 RED: Write test for `Trait` entity creation and equality
+- [x] 2.2 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Trait.java` as `@Node` record with `@Id String id, String name`
+- [x] 2.3 REFACTOR: Validate Trait immutability and null constraints
 
-- [ ] 2.4 RED: Write test for `User` entity with PREFERS relationship to Traits
-- [ ] 2.5 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/User.java` as `@Node` record with `@Id String id, String name, @Relationship(type="PREFERS") List<Trait> preferences`
-- [ ] 2.6 REFACTOR: Ensure User deduplicates repeated traits
+- [x] 2.4 RED: Write test for `User` entity with PREFERS relationship to Traits
+- [x] 2.5 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/User.java` as `@Node` record with `@Id String id, String name, @Relationship(type="PREFERS") List<Trait> preferences`
+- [x] 2.6 REFACTOR: Ensure User deduplicates repeated traits
 
-- [ ] 2.7 RED: Write test for `Shelter` entity creation
-- [ ] 2.8 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Shelter.java` as `@Node` record with `@Id String id, String name, String location`
+- [x] 2.7 RED: Write test for `Shelter` entity creation
+- [x] 2.8 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Shelter.java` as `@Node` record with `@Id String id, String name, String location`
 
-- [ ] 2.9 RED: Write test for `Pet` entity with relationships to Shelter and Traits
-- [ ] 2.10 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Pet.java` as `@Node` record with `@Id String id, String name, @Relationship(type="LOCATED_IN") Shelter shelter, @Relationship(type="HAS_TRAIT") List<Trait> traits`
-- [ ] 2.11 REFACTOR: Validate Pet cannot exist without Shelter reference
+- [x] 2.9 RED: Write test for `Pet` entity with relationships to Shelter and Traits
+- [x] 2.10 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Pet.java` as `@Node` record with `@Id String id, String name, @Relationship(type="LOCATED_IN") Shelter shelter, @Relationship(type="HAS_TRAIT") List<Trait> traits`
+- [x] 2.11 REFACTOR: Validate Pet cannot exist without Shelter reference
 
 ## Phase 3: Domain Services (TDD Cycle)
 
