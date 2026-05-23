@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/users/register/**").permitAll()
+                        .requestMatchers("/api/users/onboarding").authenticated()
                         .requestMatchers("/api/pets/**").hasRole("REFUGIO")
                         .requestMatchers("/api/swipes/**", "/api/recommendations/**").authenticated()
                         .anyRequest().authenticated()

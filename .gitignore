@@ -1,0 +1,23 @@
+# Maven
+target/
+*.class
+
+# IDEs
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+
+# Temp / OS
+.DS_Store
+Thumbs.db
+
+# Gentle AI CLI / Temporary
+.antigravitycli/
+node_modules/
+dist/
+build/
+.env.local
+.env.*.local
