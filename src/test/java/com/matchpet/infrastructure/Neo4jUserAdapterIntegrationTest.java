@@ -88,4 +88,21 @@ class Neo4jUserAdapterIntegrationTest {
 
         assertEquals(1L, traitCount);
     }
+
+    @Test
+    void shouldPersistAndLoadUserWithTrustScore() {
+        neo4jUserAdapter.save(new User("u1", "Martin", 85, List.of()));
+
+        User persisted = neo4jUserAdapter.findById("u1").orElseThrow();
+
+        assertEquals(85, persisted.trustScore());
+
+        Integer dbScore = neo4jClient.query("MATCH (u:User {id: $userId}) RETURN u.trustScore")
+                .bind("u1").to("userId")
+                .fetchAs(Integer.class)
+                .one()
+                .orElseThrow();
+
+        assertEquals(85, dbScore);
+    }
 }
