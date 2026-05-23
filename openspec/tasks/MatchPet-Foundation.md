@@ -87,8 +87,16 @@ Chain strategy: stacked-to-main
 ## Phase 7: Configuration & Wiring
 
 - [x] 7.1 Create `src/main/resources/application.yml` with Neo4j connection config (local or AuraDB)
-- [ ] 7.2 Create `src/main/java/com/adoptme/matchpet/MatchPetApplication.java` main class with `@SpringBootApplication`
+- [x] 7.2 Create `src/main/java/com/adoptme/matchpet/MatchPetApplication.java` main class with `@SpringBootApplication`
 - [ ] 7.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/config/Neo4jConfig.java` (if custom queries needed)
+
+## Phase 9: Web & Security Layer (TDD Cycle)
+
+- [x] 9.1 RED: Write MockMvc integration tests for login, registration, protected swipe/match endpoints and role-based pet registration.
+- [x] 9.2 GREEN: Implement Spring Security 6 config with AuthenticationManager, stateless JWT filter, and access rules (public auth/register; secure swipe/match; REFUGIO-only pet endpoints).
+- [x] 9.3 GREEN: Create REST controllers in `infrastructure.adapters.input.web.controllers` for user, pet, swipe and recommendations using input ports only.
+- [x] 9.4 GREEN: Add global `@RestControllerAdvice` to map validation/auth/domain errors to clean API responses.
+- [x] 9.5 REFACTOR: Keep DTO mapping/validation in controllers and preserve business logic inside use cases.
 
 ## Phase 8: Verification & Cleanup
 
