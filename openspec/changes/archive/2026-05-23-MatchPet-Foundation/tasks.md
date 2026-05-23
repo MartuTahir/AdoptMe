@@ -35,14 +35,11 @@ Chain strategy: stacked-to-main
 - [x] 2.1 RED: Write test for `Trait` entity creation and equality
 - [x] 2.2 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Trait.java` as `@Node` record with `@Id String id, String name`
 - [x] 2.3 REFACTOR: Validate Trait immutability and null constraints
-
 - [x] 2.4 RED: Write test for `User` entity with PREFERS relationship to Traits
 - [x] 2.5 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/User.java` as `@Node` record with `@Id String id, String name, @Relationship(type="PREFERS") List<Trait> preferences`
 - [x] 2.6 REFACTOR: Ensure User deduplicates repeated traits
-
 - [x] 2.7 RED: Write test for `Shelter` entity creation
 - [x] 2.8 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Shelter.java` as `@Node` record with `@Id String id, String name, String location`
-
 - [x] 2.9 RED: Write test for `Pet` entity with relationships to Shelter and Traits
 - [x] 2.10 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/model/Pet.java` as `@Node` record with `@Id String id, String name, @Relationship(type="LOCATED_IN") Shelter shelter, @Relationship(type="HAS_TRAIT") List<Trait> traits`
 - [x] 2.11 REFACTOR: Validate Pet cannot exist without Shelter reference
@@ -59,7 +56,6 @@ Chain strategy: stacked-to-main
 - [x] 4.1 Create `src/main/java/com/adoptme/matchpet/application/ports/in/GetCompatibilityUseCase.java` interface with `execute(String userId, String petId)`
 - [x] 4.2 Create `src/main/java/com/adoptme/matchpet/application/ports/out/UserPersistencePort.java` with `findById(String id)` and `save(User user)`
 - [x] 4.3 Create `src/main/java/com/adoptme/matchpet/application/ports/out/PetPersistencePort.java` with `findById(String id)` and `save(Pet pet)`
-
 - [x] 4.4 RED: Write test for `GetCompatibilityUseCase` implementation with mocked ports
 - [x] 4.5 GREEN: Create `src/main/java/com/adoptme/matchpet/application/service/GetCompatibilityService.java` implementing the use case, calling ports and delegating to CompatibilityEngine
 - [x] 4.6 REFACTOR: Add validation for missing User or Pet (throw domain exception)
@@ -68,7 +64,6 @@ Chain strategy: stacked-to-main
 
 - [x] 5.1 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/UserNeo4jRepository.java` extending `Neo4jRepository<User, String>`
 - [x] 5.2 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/PetNeo4jRepository.java` extending `Neo4jRepository<Pet, String>`
-
 - [x] 5.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jUserAdapter.java` implementing `UserPersistencePort`, injecting `UserNeo4jRepository`
 - [x] 5.4 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jPetAdapter.java` implementing `PetPersistencePort`, injecting `PetNeo4jRepository`
 
@@ -77,18 +72,16 @@ Chain strategy: stacked-to-main
 - [x] 6.1 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jUserAdapterIntegrationTest.java` using Testcontainers Neo4j
 - [x] 6.2 Test: Persist User with PREFERS relationships to Traits (Spec scenario: Alta de usuario con traits válidos)
 - [x] 6.3 Test: Verify duplicate traits are stored only once (Spec scenario: Traits duplicados en la solicitud)
-
 - [x] 6.4 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jPetAdapterIntegrationTest.java`
 - [x] 6.5 Test: Persist Pet with LOCATED_IN relationship to Shelter (Spec scenario: Alta de mascota con refugio existente)
 - [x] 6.6 Test: Verify Pet persistence fails when Shelter does not exist (Spec scenario: Refugio inexistente)
-
 - [x] 6.7 Create end-to-end test for GetCompatibilityUseCase with real Neo4j (Spec scenarios: Match con/sin coincidencias)
 
 ## Phase 7: Configuration & Wiring
 
 - [x] 7.1 Create `src/main/resources/application.yml` with Neo4j connection config (local or AuraDB)
 - [x] 7.2 Create `src/main/java/com/adoptme/matchpet/MatchPetApplication.java` main class with `@SpringBootApplication`
-- [ ] 7.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/config/Neo4jConfig.java` (if custom queries needed)
+- [x] 7.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/config/Neo4jConfig.java` (N/A - Not needed for this phase)
 
 ## Phase 9: Web & Security Layer (TDD Cycle)
 
@@ -100,7 +93,7 @@ Chain strategy: stacked-to-main
 
 ## Phase 8: Verification & Cleanup
 
-- [ ] 8.1 Run `mvn clean compile` and verify build passes
-- [ ] 8.2 Run all tests and verify coverage ≥70% (Spec NFR)
-- [ ] 8.3 Verify no prohibited dependencies: domain must NOT import Spring/Neo4j/infrastructure packages
-- [ ] 8.4 Update README.md with setup instructions (Neo4j requirement, run commands)
+- [x] 8.1 Run `mvn clean compile` and verify build passes
+- [x] 8.2 Run all tests and verify coverage ≥70% (Spec NFR)
+- [x] 8.3 Verify no prohibited dependencies: domain must NOT import Spring/Neo4j/infrastructure packages
+- [x] 8.4 Update README.md with setup instructions (Neo4j requirement, run commands)

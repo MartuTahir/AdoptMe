@@ -5,6 +5,7 @@ import com.matchpet.application.ports.input.GetCompatibilityUseCase;
 import com.matchpet.application.ports.input.RegisterPetUseCase;
 import com.matchpet.application.ports.input.RegisterUserUseCase;
 import com.matchpet.application.ports.input.SwipeUseCase;
+import com.matchpet.application.ports.input.SubmitOnboardingFormUseCase;
 import com.matchpet.application.ports.input.dto.GetCompatibilityResult;
 import com.matchpet.application.ports.input.dto.PetResult;
 import com.matchpet.application.ports.input.dto.SwipeResult;
@@ -66,6 +67,9 @@ class WebSecurityIntegrationTest {
 
     @MockBean
     private RegisterUserUseCase registerUserUseCase;
+
+    @MockBean
+    private SubmitOnboardingFormUseCase submitOnboardingFormUseCase;
 
     @MockBean
     private RegisterPetUseCase registerPetUseCase;
@@ -248,5 +252,73 @@ class WebSecurityIntegrationTest {
                         .param("petId", "p1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("User not found: u404"));
+    }
+
+    @Test
+    void shouldAllowOnboardingForAuthenticatedAdopter() throws Exception {
+        when(submitOnboardingFormUseCase.execute(any())).thenReturn(new UserResult(
+                "u1",
+                "Martin",
+                100,
+                List.of()
+        ));
+
+        String token = jwtTokenService.generateToken("adopter@matchpet.com", "ADOPTANTE");
+
+        String payload = """
+                {
+                  "userId": "u1",
+                  "housingType": "PATIO_CERRADO",
+                  "availableHours": 4,
+                  "hasPreviousExperience": true,
+                  "acceptsControlVisits": true
+                }
+                """;
+
+        mockMvc.perform(post("/api/users/onboarding")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("u1"))
+                .andExpect(jsonPath("$.trustScore").value(100));
+    }
+
+    @Test
+    void shouldRejectOnboardingWhenNoToken() throws Exception {
+        String payload = """
+                {
+                  "userId": "u1",
+                  "housingType": "PATIO_CERRADO",
+                  "availableHours": 4,
+                  "hasPreviousExperience": true,
+                  "acceptsControlVisits": true
+                }
+                """;
+
+        mockMvc.perform(post("/api/users/onboarding")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void shouldRejectOnboardingWithValidationErrors() throws Exception {
+        String token = jwtTokenService.generateToken("adopter@matchpet.com", "ADOPTANTE");
+
+        // Missing availableHours and acceptsControlVisits
+        String payload = """
+                {
+                  "userId": "u1",
+                  "housingType": "PATIO_CERRADO",
+                  "hasPreviousExperience": true
+                }
+                """;
+
+        mockMvc.perform(post("/api/users/onboarding")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest());
     }
 }

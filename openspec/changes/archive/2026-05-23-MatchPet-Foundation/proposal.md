@@ -44,7 +44,7 @@ None
 ## Risks
 
 | Risk | Likelihood | Mitigation |
-|------|------------|------------|
+|------|--------|-------------|
 | Complejidad de SDN 7 con relaciones complejas | Med | Seguir patrones de Proyecciones y DTOs para evitar ciclos. |
 | Curva de aprendizaje de Arquitectura Hexagonal | Low | Documentar claramente la responsabilidad de cada paquete. |
 
@@ -56,6 +56,6 @@ Eliminar los archivos creados y revertir `pom.xml` (si existiera). Al ser un pro
 - Java 21 JDK.
 
 ## Success Criteria
-- [ ] `pom.xml` compila correctamente con `mvn clean compile`.
-- [ ] Estructura de paquetes creada y siguiendo el patrón hexagonal.
-- [ ] Entidades de dominio `User`, `Pet` y `Trait` definidas.
+- [x] `pom.xml` compila correctamente con `mvn clean compile`.
+- [x] Estructura de paquetes creada y siguiendo el patrón hexagonal.
+- [x] Entidades de dominio `User`, `Pet` y `Trait` definidas.
