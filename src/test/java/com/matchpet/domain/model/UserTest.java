@@ -37,4 +37,17 @@ class UserTest {
 
         assertEquals("User name is required", ex.getMessage());
     }
+
+    @Test
+    void shouldDefaultTrustScoreToZeroWhenUsingCompatConstructor() {
+        User user = new User("u1", "Martin", List.of());
+        assertEquals(0, user.trustScore());
+    }
+
+    @Test
+    void shouldCreateUserWithSpecificTrustScore() {
+        User user = new User("u1", "Martin", 85, List.of());
+        assertEquals(85, user.trustScore());
+    }
 }
+
