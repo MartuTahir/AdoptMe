@@ -66,27 +66,27 @@ Chain strategy: stacked-to-main
 
 ## Phase 5: Infrastructure Layer - Neo4j Adapters
 
-- [ ] 5.1 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/UserNeo4jRepository.java` extending `Neo4jRepository<User, String>`
-- [ ] 5.2 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/PetNeo4jRepository.java` extending `Neo4jRepository<Pet, String>`
+- [x] 5.1 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/UserNeo4jRepository.java` extending `Neo4jRepository<User, String>`
+- [x] 5.2 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/repositories/PetNeo4jRepository.java` extending `Neo4jRepository<Pet, String>`
 
-- [ ] 5.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jUserAdapter.java` implementing `UserPersistencePort`, injecting `UserNeo4jRepository`
-- [ ] 5.4 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jPetAdapter.java` implementing `PetPersistencePort`, injecting `PetNeo4jRepository`
+- [x] 5.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jUserAdapter.java` implementing `UserPersistencePort`, injecting `UserNeo4jRepository`
+- [x] 5.4 Create `src/main/java/com/adoptme/matchpet/infrastructure/adapters/out/neo4j/Neo4jPetAdapter.java` implementing `PetPersistencePort`, injecting `PetNeo4jRepository`
 
 ## Phase 6: Integration Tests (Testcontainers)
 
-- [ ] 6.1 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jUserAdapterIntegrationTest.java` using Testcontainers Neo4j
-- [ ] 6.2 Test: Persist User with PREFERS relationships to Traits (Spec scenario: Alta de usuario con traits válidos)
-- [ ] 6.3 Test: Verify duplicate traits are stored only once (Spec scenario: Traits duplicados en la solicitud)
+- [x] 6.1 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jUserAdapterIntegrationTest.java` using Testcontainers Neo4j
+- [x] 6.2 Test: Persist User with PREFERS relationships to Traits (Spec scenario: Alta de usuario con traits válidos)
+- [x] 6.3 Test: Verify duplicate traits are stored only once (Spec scenario: Traits duplicados en la solicitud)
 
-- [ ] 6.4 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jPetAdapterIntegrationTest.java`
-- [ ] 6.5 Test: Persist Pet with LOCATED_IN relationship to Shelter (Spec scenario: Alta de mascota con refugio existente)
-- [ ] 6.6 Test: Verify Pet persistence fails when Shelter does not exist (Spec scenario: Refugio inexistente)
+- [x] 6.4 Create `src/test/java/com/adoptme/matchpet/infrastructure/Neo4jPetAdapterIntegrationTest.java`
+- [x] 6.5 Test: Persist Pet with LOCATED_IN relationship to Shelter (Spec scenario: Alta de mascota con refugio existente)
+- [x] 6.6 Test: Verify Pet persistence fails when Shelter does not exist (Spec scenario: Refugio inexistente)
 
-- [ ] 6.7 Create end-to-end test for GetCompatibilityUseCase with real Neo4j (Spec scenarios: Match con/sin coincidencias)
+- [x] 6.7 Create end-to-end test for GetCompatibilityUseCase with real Neo4j (Spec scenarios: Match con/sin coincidencias)
 
 ## Phase 7: Configuration & Wiring
 
-- [ ] 7.1 Create `src/main/resources/application.yml` with Neo4j connection config (local or AuraDB)
+- [x] 7.1 Create `src/main/resources/application.yml` with Neo4j connection config (local or AuraDB)
 - [ ] 7.2 Create `src/main/java/com/adoptme/matchpet/MatchPetApplication.java` main class with `@SpringBootApplication`
 - [ ] 7.3 Create `src/main/java/com/adoptme/matchpet/infrastructure/config/Neo4jConfig.java` (if custom queries needed)
 
