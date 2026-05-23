@@ -9,3 +9,7 @@ REQUIRE p.id IS UNIQUE;
 CREATE CONSTRAINT trait_id_unique IF NOT EXISTS
 FOR (t:Trait)
 REQUIRE t.id IS UNIQUE;
+
+CREATE CONSTRAINT shelter_id_unique IF NOT EXISTS
+FOR (s:Shelter)
+REQUIRE s.id IS UNIQUE;
