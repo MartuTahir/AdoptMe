@@ -49,20 +49,20 @@ Chain strategy: stacked-to-main
 
 ## Phase 3: Domain Services (TDD Cycle)
 
-- [ ] 3.1 RED: Write test for `CompatibilityEngine.calculate()` with matching traits (score > 0)
-- [ ] 3.2 RED: Write test for `CompatibilityEngine.calculate()` with no matching traits (score = 0)
-- [ ] 3.3 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/service/CompatibilityEngine.java` with `calculate(Set<Trait> userTraits, Set<Trait> petTraits)` returning score and matched traits
-- [ ] 3.4 REFACTOR: Extract CompatibilityResult as domain value object (record)
+- [x] 3.1 RED: Write test for `CompatibilityEngine.calculate()` with matching traits (score > 0)
+- [x] 3.2 RED: Write test for `CompatibilityEngine.calculate()` with no matching traits (score = 0)
+- [x] 3.3 GREEN: Create `src/main/java/com/adoptme/matchpet/domain/service/CompatibilityEngine.java` with `calculate(Set<Trait> userTraits, Set<Trait> petTraits)` returning score and matched traits
+- [x] 3.4 REFACTOR: Extract CompatibilityResult as domain value object (record)
 
 ## Phase 4: Application Layer - Ports (TDD Cycle)
 
-- [ ] 4.1 Create `src/main/java/com/adoptme/matchpet/application/ports/in/GetCompatibilityUseCase.java` interface with `execute(String userId, String petId)`
-- [ ] 4.2 Create `src/main/java/com/adoptme/matchpet/application/ports/out/UserPersistencePort.java` with `findById(String id)` and `save(User user)`
-- [ ] 4.3 Create `src/main/java/com/adoptme/matchpet/application/ports/out/PetPersistencePort.java` with `findById(String id)` and `save(Pet pet)`
+- [x] 4.1 Create `src/main/java/com/adoptme/matchpet/application/ports/in/GetCompatibilityUseCase.java` interface with `execute(String userId, String petId)`
+- [x] 4.2 Create `src/main/java/com/adoptme/matchpet/application/ports/out/UserPersistencePort.java` with `findById(String id)` and `save(User user)`
+- [x] 4.3 Create `src/main/java/com/adoptme/matchpet/application/ports/out/PetPersistencePort.java` with `findById(String id)` and `save(Pet pet)`
 
-- [ ] 4.4 RED: Write test for `GetCompatibilityUseCase` implementation with mocked ports
-- [ ] 4.5 GREEN: Create `src/main/java/com/adoptme/matchpet/application/service/GetCompatibilityService.java` implementing the use case, calling ports and delegating to CompatibilityEngine
-- [ ] 4.6 REFACTOR: Add validation for missing User or Pet (throw domain exception)
+- [x] 4.4 RED: Write test for `GetCompatibilityUseCase` implementation with mocked ports
+- [x] 4.5 GREEN: Create `src/main/java/com/adoptme/matchpet/application/service/GetCompatibilityService.java` implementing the use case, calling ports and delegating to CompatibilityEngine
+- [x] 4.6 REFACTOR: Add validation for missing User or Pet (throw domain exception)
 
 ## Phase 5: Infrastructure Layer - Neo4j Adapters
 
