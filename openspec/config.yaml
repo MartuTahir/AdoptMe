@@ -1,0 +1,13 @@
+project: adoptme
+stack:
+  language: Java 21 / Spring Boot 3
+  architecture: Hexagonal Architecture (Target)
+persistence:
+  mode: hybrid
+testing:
+  strict_tdd: true
+  runner: null
+  capabilities:
+    unit: false
+    integration: false
+    e2e: false
