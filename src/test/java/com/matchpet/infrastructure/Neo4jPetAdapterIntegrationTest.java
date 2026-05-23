@@ -3,6 +3,7 @@ package com.matchpet.infrastructure;
 import com.matchpet.domain.model.Pet;
 import com.matchpet.domain.model.Shelter;
 import com.matchpet.domain.model.Trait;
+import com.matchpet.domain.exception.EntityNotFoundException;
 import com.matchpet.infrastructure.adapters.output.neo4j.Neo4jPetAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,7 @@ class Neo4jPetAdapterIntegrationTest {
         Shelter unknownShelter = new Shelter("s404", "Missing", "Nowhere");
         Pet orphanPet = new Pet("p404", "Ghost", unknownShelter, List.of(new Trait("t1", "Calm")));
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+        EntityNotFoundException ex = assertThrows(EntityNotFoundException.class,
                 () -> neo4jPetAdapter.save(orphanPet));
 
         assertEquals("Shelter not found: s404", ex.getMessage());
