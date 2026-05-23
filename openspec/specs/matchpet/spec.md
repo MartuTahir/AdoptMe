@@ -25,6 +25,9 @@ El sistema **MUST** permitir crear y actualizar un `User` con cero o más `Trait
 - **WHEN** se actualiza su score de confianza a un valor válido (0-100)
 - **THEN** el valor del campo `trustScore` del nodo `User` se actualiza de forma consistente en Neo4j
 
+### Requirement: Persistir Refugio independiente
+El sistema **MUST** permitir persistir un `Shelter` con su identificador único, nombre y ubicación. El sistema **MUST** garantizar la unicidad de los ID de los refugios de forma consistente.
+
 ### Requirement: Persistir Mascota vinculada a Refugio
 El sistema **MUST** permitir persistir una `Pet` vinculada a un `Shelter` (Refugio) existente. El sistema **MUST NOT** crear mascotas huérfanas sin vínculo de refugio.
 
@@ -53,6 +56,20 @@ El sistema **MUST** exponer una consulta de matching simple entre `User` and `Pe
 - **WHEN** se ejecuta la consulta de compatibilidad
 - **THEN** se devuelve score igual a cero
 
+### Requirement: Persistir Swipe (Interacción de Adopción)
+El sistema **MUST** permitir persistir un `SwipeEvent` representando una interacción de tipo `LIKE` o `DISLIKE` de un usuario hacia una mascota. El sistema **MUST** guardar la relación `SWIPED` en el grafo de Neo4j conectando el nodo `User` con el nodo `Pet`, incluyendo las propiedades `action` y `timestamp` de forma consistente.
+
+#### Scenario: Persistencia exitosa de un swipe LIKE
+- **GIVEN** un usuario y una mascota existentes en el sistema
+- **WHEN** se ejecuta el registro de un swipe con acción `LIKE`
+- **THEN** se crea una relación `SWIPED` con propiedad `action = 'LIKE'` en el grafo de Neo4j
+- **AND** la relación tiene el `timestamp` correcto en formato temporal
+
+#### Scenario: Persistencia exitosa de un swipe DISLIKE
+- **GIVEN** un usuario y una mascota existentes en el sistema
+- **WHEN** se ejecuta el registro de un swipe con acción `DISLIKE`
+- **THEN** se crea una relación `SWIPED` con propiedad `action = 'DISLIKE'` en el grafo de Neo4j
+
 ## Non-Functional Requirements
 
 ### Requirement: Cumplimiento de Clean/Hexagonal Architecture
@@ -67,9 +84,10 @@ La solución **MUST** incluir tests automatizados para todos los casos de uso de
 Las operaciones de escritura **MUST** garantizar consistencia de nodos y relaciones en una unidad transaccional por caso de uso.
 
 ## Technical Acceptance Criteria
-- Se validan los 6 escenarios funcionales con tests automatizados (unit/integration según corresponda).
+- Se validan los escenarios funcionales con tests automatizados (unit/integration según corresponda).
 - Se verifica que no existan dependencias prohibidas desde `domain` hacia Spring/Neo4j/web.
 - Se verifica persistencia de relaciones esperadas:
   - `User` -> `Trait` (preferencias)
   - `Pet` -> `Shelter` (vínculo de refugio)
+  - `User` -> `Pet` (relación `SWIPED` con acción y timestamp)
 - La consulta de compatibilidad simple devuelve score determinístico y reproducible para mismos datos.

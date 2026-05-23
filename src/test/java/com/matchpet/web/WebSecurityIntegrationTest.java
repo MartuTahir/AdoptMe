@@ -6,6 +6,7 @@ import com.matchpet.application.ports.input.RegisterPetUseCase;
 import com.matchpet.application.ports.input.RegisterUserUseCase;
 import com.matchpet.application.ports.input.SwipeUseCase;
 import com.matchpet.application.ports.input.SubmitOnboardingFormUseCase;
+import com.matchpet.application.ports.input.RegisterShelterUseCase;
 import com.matchpet.application.ports.input.dto.GetCompatibilityResult;
 import com.matchpet.application.ports.input.dto.PetResult;
 import com.matchpet.application.ports.input.dto.SwipeResult;
@@ -47,7 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         UserController.class,
         PetController.class,
         SwipeController.class,
-        RecommendationController.class
+        RecommendationController.class,
+        com.matchpet.infrastructure.adapters.input.web.controllers.ShelterController.class
 })
 @Import({SecurityConfig.class, JwtTokenService.class, GlobalExceptionHandler.class})
 @TestPropertySource(properties = {
@@ -79,6 +81,9 @@ class WebSecurityIntegrationTest {
 
     @MockBean
     private GetCompatibilityUseCase getCompatibilityUseCase;
+
+    @MockBean
+    private RegisterShelterUseCase registerShelterUseCase;
 
     @Test
     void shouldAllowPublicLoginAndReturnJwt() throws Exception {
@@ -184,6 +189,30 @@ class WebSecurityIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenShelterDoesNotExist() throws Exception {
+        when(registerPetUseCase.execute(any()))
+                .thenThrow(new EntityNotFoundException("Shelter not found: s404"));
+
+        String token = jwtTokenService.generateToken("refugio@matchpet.com", "REFUGIO");
+
+        String payload = """
+                {
+                  "id": "p1",
+                  "name": "Luna",
+                  "shelter": {"id":"s404","name":"Refugio Norte","location":"CABA"},
+                  "traits": [{"id":"t1","name":"Friendly"}]
+                }
+                """;
+
+        mockMvc.perform(post("/api/pets")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Shelter not found: s404"));
     }
 
     @Test
