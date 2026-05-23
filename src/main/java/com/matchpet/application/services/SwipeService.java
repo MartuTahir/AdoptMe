@@ -7,8 +7,12 @@ import com.matchpet.application.ports.output.PetPersistencePort;
 import com.matchpet.application.ports.output.SwipePersistencePort;
 import com.matchpet.application.ports.output.UserPersistencePort;
 import com.matchpet.domain.exception.EntityNotFoundException;
+import com.matchpet.domain.model.SwipeAction;
 import com.matchpet.domain.model.SwipeEvent;
+import com.matchpet.domain.service.ImpulsivityEngine;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 public class SwipeService implements SwipeUseCase {
@@ -16,6 +20,7 @@ public class SwipeService implements SwipeUseCase {
     private final UserPersistencePort userPersistencePort;
     private final PetPersistencePort petPersistencePort;
     private final SwipePersistencePort swipePersistencePort;
+    private final ImpulsivityEngine impulsivityEngine = new ImpulsivityEngine();
 
     public SwipeService(UserPersistencePort userPersistencePort,
                         PetPersistencePort petPersistencePort,
@@ -32,6 +37,11 @@ public class SwipeService implements SwipeUseCase {
 
         petPersistencePort.findById(command.petId())
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found: " + command.petId()));
+
+        if (command.action() == SwipeAction.LIKE) {
+            long recentLikes = swipePersistencePort.countLikesSince(command.userId(), Instant.now().minusSeconds(60));
+            impulsivityEngine.checkImpulsivity(recentLikes);
+        }
 
         SwipeEvent savedEvent = swipePersistencePort.save(
                 new SwipeEvent(command.userId(), command.petId(), command.action(), null)

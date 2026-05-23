@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -68,5 +69,33 @@ class SwipeServiceTest {
                 () -> service.execute(new SwipeCommand("u-404", "p1", SwipeAction.LIKE)));
 
         assertEquals("User not found: u-404", ex.getMessage());
+    }
+
+    @Test
+    void shouldRejectLikeSwipeWhenBehaviorIsImpulsive() {
+        User user = new User("u1", "Martin", List.of());
+        Pet pet = new Pet("p1", "Luna", new Shelter("s1", "Refugio Norte", "CABA"), List.of());
+
+        when(userPersistencePort.findById("u1")).thenReturn(Optional.of(user));
+        when(petPersistencePort.findById("p1")).thenReturn(Optional.of(pet));
+        when(swipePersistencePort.countLikesSince(eq("u1"), any())).thenReturn(10L);
+
+        assertThrows(com.matchpet.domain.exception.ImpulsiveBehaviorException.class,
+                () -> service.execute(new SwipeCommand("u1", "p1", SwipeAction.LIKE)));
+    }
+
+    @Test
+    void shouldAllowDislikeSwipeEvenIfLikesAreImpulsive() {
+        User user = new User("u1", "Martin", List.of());
+        Pet pet = new Pet("p1", "Luna", new Shelter("s1", "Refugio Norte", "CABA"), List.of());
+
+        when(userPersistencePort.findById("u1")).thenReturn(Optional.of(user));
+        when(petPersistencePort.findById("p1")).thenReturn(Optional.of(pet));
+        when(swipePersistencePort.countLikesSince(eq("u1"), any())).thenReturn(10L);
+        when(swipePersistencePort.save(any(SwipeEvent.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        SwipeResult result = service.execute(new SwipeCommand("u1", "p1", SwipeAction.DISLIKE));
+
+        assertEquals(SwipeAction.DISLIKE, result.action());
     }
 }
