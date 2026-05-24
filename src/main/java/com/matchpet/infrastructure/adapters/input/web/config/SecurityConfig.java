@@ -2,6 +2,7 @@ package com.matchpet.infrastructure.adapters.input.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,7 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/users/register/**").permitAll()
                         .requestMatchers("/api/users/onboarding").authenticated()
-                        .requestMatchers("/api/pets/**").hasRole("REFUGIO")
+                        .requestMatchers(HttpMethod.GET, "/api/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/pets/**").hasRole("REFUGIO")
                         .requestMatchers("/api/shelters/**").hasRole("REFUGIO")
                         .requestMatchers("/api/swipes/**", "/api/recommendations/**", "/api/chats/**").authenticated()
                         .anyRequest().authenticated()
