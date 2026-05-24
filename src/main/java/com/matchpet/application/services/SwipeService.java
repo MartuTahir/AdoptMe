@@ -3,6 +3,7 @@ package com.matchpet.application.services;
 import com.matchpet.application.ports.input.SwipeUseCase;
 import com.matchpet.application.ports.input.dto.SwipeCommand;
 import com.matchpet.application.ports.input.dto.SwipeResult;
+import com.matchpet.application.ports.output.AdoptionRequestPersistencePort;
 import com.matchpet.application.ports.output.PetPersistencePort;
 import com.matchpet.application.ports.output.SwipePersistencePort;
 import com.matchpet.application.ports.output.UserPersistencePort;
@@ -20,14 +21,17 @@ public class SwipeService implements SwipeUseCase {
     private final UserPersistencePort userPersistencePort;
     private final PetPersistencePort petPersistencePort;
     private final SwipePersistencePort swipePersistencePort;
+    private final AdoptionRequestPersistencePort adoptionRequestPersistencePort;
     private final ImpulsivityEngine impulsivityEngine = new ImpulsivityEngine();
 
     public SwipeService(UserPersistencePort userPersistencePort,
                         PetPersistencePort petPersistencePort,
-                        SwipePersistencePort swipePersistencePort) {
+                        SwipePersistencePort swipePersistencePort,
+                        AdoptionRequestPersistencePort adoptionRequestPersistencePort) {
         this.userPersistencePort = userPersistencePort;
         this.petPersistencePort = petPersistencePort;
         this.swipePersistencePort = swipePersistencePort;
+        this.adoptionRequestPersistencePort = adoptionRequestPersistencePort;
     }
 
     @Override
@@ -46,6 +50,10 @@ public class SwipeService implements SwipeUseCase {
         SwipeEvent savedEvent = swipePersistencePort.save(
                 new SwipeEvent(command.userId(), command.petId(), command.action(), null)
         );
+
+        if (command.action() == SwipeAction.LIKE) {
+            adoptionRequestPersistencePort.createOrGetPending(command.userId(), command.petId());
+        }
 
         return new SwipeResult(savedEvent.userId(), savedEvent.petId(), savedEvent.action(), savedEvent.timestamp());
     }

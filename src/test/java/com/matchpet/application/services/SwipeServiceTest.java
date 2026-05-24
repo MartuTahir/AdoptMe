@@ -2,12 +2,15 @@ package com.matchpet.application.services;
 
 import com.matchpet.application.ports.input.dto.SwipeCommand;
 import com.matchpet.application.ports.input.dto.SwipeResult;
+import com.matchpet.application.ports.output.AdoptionRequestPersistencePort;
 import com.matchpet.application.ports.output.PetPersistencePort;
 import com.matchpet.application.ports.output.SwipePersistencePort;
 import com.matchpet.application.ports.output.UserPersistencePort;
 import com.matchpet.domain.exception.EntityNotFoundException;
 import com.matchpet.domain.model.Pet;
 import com.matchpet.domain.model.Shelter;
+import com.matchpet.domain.model.AdoptionRequest;
+import com.matchpet.domain.model.AdoptionRequestStatus;
 import com.matchpet.domain.model.SwipeAction;
 import com.matchpet.domain.model.SwipeEvent;
 import com.matchpet.domain.model.Trait;
@@ -22,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SwipeServiceTest {
@@ -29,7 +33,10 @@ class SwipeServiceTest {
     private final UserPersistencePort userPersistencePort = mock(UserPersistencePort.class);
     private final PetPersistencePort petPersistencePort = mock(PetPersistencePort.class);
     private final SwipePersistencePort swipePersistencePort = mock(SwipePersistencePort.class);
-    private final SwipeService service = new SwipeService(userPersistencePort, petPersistencePort, swipePersistencePort);
+    private final AdoptionRequestPersistencePort adoptionRequestPersistencePort =
+            mock(AdoptionRequestPersistencePort.class);
+    private final SwipeService service = new SwipeService(userPersistencePort, petPersistencePort,
+            swipePersistencePort, adoptionRequestPersistencePort);
 
     @Test
     void shouldPersistLikeSwipe() {
@@ -39,12 +46,15 @@ class SwipeServiceTest {
         when(userPersistencePort.findById("u1")).thenReturn(Optional.of(user));
         when(petPersistencePort.findById("p1")).thenReturn(Optional.of(pet));
         when(swipePersistencePort.save(any(SwipeEvent.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(adoptionRequestPersistencePort.createOrGetPending("u1", "p1"))
+                .thenReturn(new AdoptionRequest("u1:p1", "u1", "p1", AdoptionRequestStatus.PENDING, null, null));
 
         SwipeResult result = service.execute(new SwipeCommand("u1", "p1", SwipeAction.LIKE));
 
         assertEquals("u1", result.userId());
         assertEquals("p1", result.petId());
         assertEquals(SwipeAction.LIKE, result.action());
+        verify(adoptionRequestPersistencePort).createOrGetPending("u1", "p1");
     }
 
     @Test
@@ -97,5 +107,21 @@ class SwipeServiceTest {
         SwipeResult result = service.execute(new SwipeCommand("u1", "p1", SwipeAction.DISLIKE));
 
         assertEquals(SwipeAction.DISLIKE, result.action());
+    }
+
+    @Test
+    void shouldCreateAdoptionRequestWhenLike() {
+        User user = new User("u1", "Martin", List.of());
+        Pet pet = new Pet("p1", "Luna", new Shelter("s1", "Refugio Norte", "CABA"), List.of());
+
+        when(userPersistencePort.findById("u1")).thenReturn(Optional.of(user));
+        when(petPersistencePort.findById("p1")).thenReturn(Optional.of(pet));
+        when(swipePersistencePort.save(any(SwipeEvent.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(adoptionRequestPersistencePort.createOrGetPending("u1", "p1"))
+                .thenReturn(new AdoptionRequest("u1:p1", "u1", "p1", AdoptionRequestStatus.PENDING, null, null));
+
+        service.execute(new SwipeCommand("u1", "p1", SwipeAction.LIKE));
+
+        verify(adoptionRequestPersistencePort).createOrGetPending("u1", "p1");
     }
 }
