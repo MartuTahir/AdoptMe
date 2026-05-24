@@ -1,13 +1,49 @@
+schema: spec-driven
+
 project: adoptme
+
 stack:
-  language: Java 21 / Spring Boot 3
+  language: Java 21
+  framework: Spring Boot 3.4
+  build: Maven
+  database: Neo4j
   architecture: Hexagonal Architecture (Target)
+
+context: |
+  Tech stack: Java 21, Spring Boot 3.4, Maven, Neo4j
+  Architecture: Hexagonal (target)
+  Testing: JUnit 5 + Spring Boot Test + Testcontainers
+  Style: Not documented
+
 persistence:
   mode: hybrid
+
 testing:
   strict_tdd: true
-  runner: null
+  runner: mvn test
   capabilities:
-    unit: false
-    integration: false
+    unit: true
+    integration: true
     e2e: false
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    - Follow existing code patterns
+    tdd: true
+    test_command: "mvn test"
+  verify:
+    test_command: "mvn test"
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas

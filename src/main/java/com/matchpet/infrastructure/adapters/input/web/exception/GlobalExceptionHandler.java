@@ -1,5 +1,6 @@
 package com.matchpet.infrastructure.adapters.input.web.exception;
 
+import com.matchpet.domain.exception.AuthorizationException;
 import com.matchpet.domain.exception.EntityNotFoundException;
 import com.matchpet.infrastructure.adapters.input.web.dto.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthorization(AuthorizationException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.FORBIDDEN, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

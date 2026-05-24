@@ -16,4 +16,7 @@ public interface SwipeNeo4jRepository extends Neo4jRepository<User, String> {
            "WHERE r.timestamp >= $since " +
            "RETURN count(r)")
     long countLikesSince(String userId, Instant since);
+
+    @Query("MATCH (u:User {id: $userId})-[r:SWIPED {action: 'LIKE'}]->(p:Pet {id: $petId}) RETURN count(r) > 0")
+    boolean existsLike(String userId, String petId);
 }

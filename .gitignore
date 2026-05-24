@@ -16,6 +16,7 @@ Thumbs.db
 
 # Gentle AI CLI / Temporary
 .antigravitycli/
+.atl/
 node_modules/
 dist/
 build/

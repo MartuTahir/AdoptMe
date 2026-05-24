@@ -9,4 +9,7 @@ public interface PetNeo4jRepository extends Neo4jRepository<Pet, String> {
 
     @Query("MATCH (s:Shelter {id: $shelterId}) RETURN count(s) > 0")
     boolean existsShelterById(@Param("shelterId") String shelterId);
+
+    @Query("MATCH (s:Shelter {id: $shelterId})-[:OWNED_BY]-(p:Pet {id: $petId}) RETURN count(p) > 0")
+    boolean isOwner(@Param("shelterId") String shelterId, @Param("petId") String petId);
 }
