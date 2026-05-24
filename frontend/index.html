@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdoptMe - Swipe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="p-4 flex justify-between items-center bg-white shadow-sm">
+            <img src="assets/logo.svg" alt="AdoptMe Logo" class="h-8">
+            <div class="flex items-center space-x-2">
+                <span id="user-location" class="text-xs text-gray-500">Buenos Aires, AR</span>
+                <button id="profile-btn" class="p-2 rounded-full bg-gray-100">👤</button>
+            </div>
+        </header>
+
+        <!-- Main Swipe Area -->
+        <main class="flex-grow flex items-center justify-center p-4 relative overflow-hidden">
+            <div id="swipe-container" class="w-full aspect-[3/4] relative">
+                <!-- Card Stack via JS -->
+                <div class="absolute inset-0 flex items-center justify-center text-gray-400 italic">
+                    Cargando mascotas...
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Actions -->
+        <footer class="p-8 flex justify-center space-x-8 items-center">
+            <button id="dislike-btn" class="h-16 w-16 rounded-full bg-white shadow-lg border border-red-50 text-red-500 text-2xl flex items-center justify-center hover:scale-110 transition-transform">✖</button>
+            <button id="like-btn" class="h-20 w-20 rounded-full bg-white shadow-xl border border-green-50 text-green-500 text-4xl flex items-center justify-center hover:scale-110 transition-transform">♥</button>
+        </footer>
+    </div>
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
