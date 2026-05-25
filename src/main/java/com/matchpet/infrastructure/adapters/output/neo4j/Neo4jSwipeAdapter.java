@@ -31,4 +31,9 @@ public class Neo4jSwipeAdapter implements SwipePersistencePort {
     public long countLikesSince(String userId, Instant since) {
         return repository.countLikesSince(userId, since);
     }
+
+    @Override
+    public boolean existsSwipe(String userId, String petId, String action) {
+        return repository.existsSwipe(userId, petId, action);
+    }
 }

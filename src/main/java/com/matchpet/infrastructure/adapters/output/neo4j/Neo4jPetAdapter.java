@@ -4,6 +4,8 @@ import com.matchpet.application.ports.output.PetPersistencePort;
 import com.matchpet.domain.exception.EntityNotFoundException;
 import com.matchpet.domain.model.Pet;
 import com.matchpet.infrastructure.adapters.output.neo4j.repositories.PetNeo4jRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,11 @@ public class Neo4jPetAdapter implements PetPersistencePort {
     @Override
     public Optional<Pet> findById(String id) {
         return petNeo4jRepository.findById(id);
+    }
+
+    @Override
+    public Page<Pet> findAll(Pageable pageable) {
+        return petNeo4jRepository.findAll(pageable);
     }
 
     @Override

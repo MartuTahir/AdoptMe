@@ -6,6 +6,7 @@ import com.matchpet.application.ports.input.dto.SwipeResult;
 import com.matchpet.application.ports.output.PetPersistencePort;
 import com.matchpet.application.ports.output.SwipePersistencePort;
 import com.matchpet.application.ports.output.UserPersistencePort;
+import com.matchpet.domain.exception.DuplicateSwipeException;
 import com.matchpet.domain.exception.EntityNotFoundException;
 import com.matchpet.domain.model.SwipeAction;
 import com.matchpet.domain.model.SwipeEvent;
@@ -32,6 +33,13 @@ public class SwipeService implements SwipeUseCase {
 
     @Override
     public SwipeResult execute(SwipeCommand command) {
+        if (command.action() == SwipeAction.LIKE
+                && swipePersistencePort.existsSwipe(command.userId(), command.petId(), SwipeAction.LIKE.name())) {
+            throw new DuplicateSwipeException(
+                    "User " + command.userId() + " already liked pet " + command.petId()
+            );
+        }
+
         userPersistencePort.findById(command.userId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + command.userId()));
 

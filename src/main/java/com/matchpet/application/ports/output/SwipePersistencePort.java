@@ -8,4 +8,6 @@ public interface SwipePersistencePort {
     SwipeEvent save(SwipeEvent swipeEvent);
 
     long countLikesSince(String userId, Instant since);
+
+    boolean existsSwipe(String userId, String petId, String action);
 }
